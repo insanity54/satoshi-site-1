@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>    
+  <!-- Alpine Plugins -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+   
+  <!-- Alpine Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.4.1/ethers.umd.min.js" integrity="sha512-ONjOOY0bn/27PPHiXGFD1TUck+n/DQC9+9IbboDfWCQujRpxK+JVAM7wFbUeNRWQHB/Ov9hWErvqebZPc3z29g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+  integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M"
+  crossorigin="anonymous">
+  </script>
+  <script src=" https://cdn.jsdelivr.net/npm/howler@2.2.3/dist/howler.min.js "></script>
+<link
+rel="stylesheet"
+href="https://unpkg.com/98.css"
+>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/imagehover.css/2.0.0/css/imagehover.min.css">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+  <div class="content" x-data="nftComponent()" >
+    <div class="window" style="width: 320px">
+      <div class="title-bar">
+
+        <div class="title-bar-text noselect"><img src="/assets/mmsn-logo-dual.png">мιℓα∂умѕη - 𝘮𝘮𝘴𝘯</div>
+        <div class="title-bar-controls">
+          <button x-on:click="sfx('min')" aria-label="Minimize"></button>
+          <button x-on:click="sfx('max')" aria-label="Maximize"></button>
+          <button x-on:click="sfx('cls')" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="menu">
+          <span>File</span><span>Contacts</span><span>Actions</span><span>Tools</span><span>Help</span> 
+        </div>
+      </div>
+      <div x-show="screen === 'login'" class="window-body">
+        <div class="mmsn-background">
+          <div class="mmsn-foreground">
+            <div class="column">
+              <div class="column-item" style="margin-bottom: 300px;">
+                <div class="mmsn-inlay">
+                  <div class="mmsn-inlay-item">
+                  </div>
+                  <div class="mmsn-inlay-item">
+                    <strong><a 
+                      href="#" 
+                      x-on:click.prevent="signin"
+                      >Click here to sign in</a></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="column-item">
+                  <div class="mmsn-logo">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="screen === 'chat'" class="window-body">
+          <div class="mmsn-background">
+            <div class="mmsn-foreground">
+              <div class="column">
+                <div class="row">
+                  <div class="column">
+                    <p>sksksksksksksksksksksksksksksksksk</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="screen === 'main'" class="window-body">
+          <div class="mmsn-background">
+            <div class="mmsn-foreground">
+              <div class="column">
+                <div class="row">
+                  <div class="column">
+                    <svg id="avatar" width="64" height="64" x-bind:data-jdenticon-hash="address"></svg>
+                  </div>
+                  <div class="column" style="flex-grow: 1; margin-right:3px">
+                    <div class="row" style="justify-content: space-around; flex-grow: 1;">
+                      <div class="column align-end">
+                        <svg x-on:click.prevent="signout" style="padding-bottom: 0.5em;" id="down-arrow" width="12" height="12">
+                          <path fill="#000" d="m2,2 4,4 4-4"/>
+                        </svg>
+                      </div>
+                      <div class="column">
+
+                        <span class="status subdued">My Status:</span>
+                        <div>
+                          <span class="name" x-text="addressTrunc"></span>
+                          <span class="status">(Online)</span>
+                        </div>
+
+                      </div>
+                      <div class="row align-end" style="font-size:12pt; padding-bottom: 0.4em; opacity:0.3;">
+                        ✨
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="ruler"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="row grow msg-contact">
+                    <p class="blu">💌&nbsp;&nbsp;&nbsp;<a x-on:click.prevent="screen='chat'" class="blu" href="#">1 new message</a></p>
+                  </div>
+                </div>
+                <div class="row" style="margin-bottom: 1em;">
+                  <div class="row grow msg-contact">
+                    <img 
+                      width="18px" 
+                      height="18px" 
+                      src="/assets/down-ball.png"
+                      x-show="!isOnlineGroupDisplayed"
+                      x-on:click="isOnlineGroupDisplayed = !isOnlineGroupDisplayed" 
+                    >
+                    <img 
+                      width="18px" 
+                      height="18px" 
+                      src="/assets/upp-ball.png"
+                      x-show="isOnlineGroupDisplayed"
+                      x-on:click="isOnlineGroupDisplayed = !isOnlineGroupDisplayed" 
+                    >&nbsp;&nbsp;&nbsp;
+                    <p style="margin: 0;" class="blu thicc">Online (1)</p>
+                  </div>
+                </div>
+
+                <div x-show="isOnlineGroupDisplayed" class="row" style="margin-bottom: 1em;">
+                  <div class="row grow msg-contact">
+                    <img style="margin-left: 1.5em;" width="18px" height="18px" src="/assets/mmsn-logo-single.png">&nbsp;&nbsp;&nbsp;
+                    <p style="margin: 0 0.5em;" class="">XoX_Milady_XoX (Away)</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="row grow msg-contact">
+                    <img 
+                      width="18px" 
+                      height="18px" 
+                      src="/assets/down-ball.png"
+                      x-show="!isOfflineGroupDisplayed"
+                      x-on:click="isOfflineGroupDisplayed = !isOfflineGroupDisplayed" 
+                    >
+                    <img
+                      x-on:click="isOfflineGroupDisplayed = !isOfflineGroupDisplayed" 
+                      x-show="isOfflineGroupDisplayed"
+                      width="18px" 
+                      height="18px" 
+                      src="/assets/upp-ball.png"
+                    >&nbsp;&nbsp;&nbsp;
+                    <p style="margin: 0;" class="blu thicc">Offline (3)</p>
+                  </div>
+                </div>
+
+
+                <div class="row" x-show="isOfflineGroupDisplayed">
+                  <div class="row" style="margin-bottom: 1em; margin-top: 0.5em;">
+                    <div class="row grow msg-contact">
+                      <img style="margin-left: 1.5em;" width="18px" height="18px" src="/assets/mmsn-logo-single-offline.png">&nbsp;&nbsp;&nbsp;
+                      <p style="margin: 0 0.5em;" class="">~~~jessi~~~</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" x-show="isOfflineGroupDisplayed">
+                  <div class="row" style="margin-bottom: 1em;">
+                    <div class="row grow msg-contact">
+                      <img style="margin-left: 1.5em;" width="18px" height="18px" src="/assets/mmsn-logo-single-offline.png">&nbsp;&nbsp;&nbsp;
+                      <p style="margin: 0 0.5em;" class="">icanhasborgar33</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" x-show="isOfflineGroupDisplayed">
+                  <div class="row" style="margin-bottom: 1em;">
+                    <div class="row grow msg-contact">
+                      <img style="margin-left: 1.5em;" width="18px" height="18px" src="/assets/mmsn-logo-single-offline.png">&nbsp;&nbsp;&nbsp;
+                      <p style="margin: 0 0.5em;" class="">REMCO_CEO</p>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+
+
+              <div class="spacer" style="margin-bottom: 75px;">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <figure class="imghvr-push-left">
+              <img src="https://placekitten.com/304/120">
+              <figcaption>
+                (placeholder kitten)
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+    <script src="/hamburger.js"></script>
+    <script src="/nft.js"></script>
+  </body>
+  </html>
